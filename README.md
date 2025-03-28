@@ -103,7 +103,6 @@ python main.py
 ## 🛠 Tecnologías Utilizadas
 - **Python 3**
 - **Programación Orientada a Objetos (POO)**
-- **Tkinter (Opcional para interfaz gráfica)**
 
 🚀 ¡Gracias por usar el sistema de gestión de biblioteca! 📚
 
