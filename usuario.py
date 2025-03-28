@@ -18,15 +18,18 @@ class Usuario:
         """
         return len(self.prestamos) < self.LIMITE_PRESTAMOS
 
-    def agregar_prestamo(self, prestamo):
-        """
-        Agrega un préstamo a la lista de préstamos del usuario si no ha alcanzado el límite.
-        Retorna True si el préstamo se agregó con éxito, de lo contrario False.
-        """
-        if len(self.prestamos) < self.LIMITE_PRESTAMOS:  # Verifica si el usuario no ha alcanzado el límite de préstamos.
-            self.prestamos.append(prestamo)  # Agrega el préstamo a la lista.
-            return True  # Indica que el préstamo se agregó con éxito.
-        return False  # Indica que no se pudo agregar el préstamo porque se alcanzó el límite.
+    def agregar_prestamo(self, libro):
+        """Agrega un libro a la lista de préstamos del usuario si no supera el límite."""
+        if len(self.prestamos) >= 3:
+            print("No puedes tomar más de 3 libros prestados a la vez.")
+            return False  # Evita el préstamo si ya tiene 3 libros
+        
+        if libro in self.prestamos:
+            print("No puedes pedir el mismo libro más de una vez.")
+            return False  # Evita el préstamo duplicado
+
+        self.prestamos.append(libro)
+        return True
 
     def remover_prestamo(self, prestamo):
         """

@@ -52,16 +52,17 @@ class Biblioteca:
         return [libro for libro in self.libros if getattr(libro, criterio, '').lower() == valor.lower()]
 
     def realizar_prestamo(self, usuario, libro, dias):
-        """
-        Realiza un préstamo de un libro a un usuario por un número de días.
-        - Verifica si el libro puede ser prestado y si el usuario puede recibir el préstamo.
-        - Si es posible, crea un objeto Prestamo y lo agrega a la lista de préstamos.
-        Retorna True si el préstamo se realizó con éxito, de lo contrario False.
-        """
-        if libro.prestar() and usuario.agregar_prestamo(libro):
-            prestamo = Prestamo(usuario, libro, dias)  # Crea un nuevo préstamo.
-            self.prestamos.append(prestamo)  # Agrega el préstamo a la lista de préstamos.
+        """Realiza un préstamo validando que el libro tenga disponibilidad."""
+        if libro.disponibles == 0:
+            print("No hay ejemplares disponibles para préstamo.")
+            return False  # No se puede prestar si no hay disponibilidad
+
+        if usuario.agregar_prestamo(libro):  # Ya valida límite y duplicados
+            libro.prestar()
+            prestamo = Prestamo(usuario, libro, dias)
+            self.prestamos.append(prestamo)
             return True
+
         return False
 
     def devolver_libro(self, usuario, libro):

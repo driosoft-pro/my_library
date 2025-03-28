@@ -1,166 +1,183 @@
-from biblioteca import Biblioteca  # Importa la clase Biblioteca para gestionar libros, usuarios y préstamos.
-from usuario import Usuario  # Importa la clase Usuario para representar a los usuarios de la biblioteca.
-from libro import Libro  # Importa la clase Libro para representar los libros de la biblioteca.
-from bd import BaseDatos  # Importa la clase BaseDatos para cargar datos predefinidos de libros y usuarios.
+from biblioteca import Biblioteca
+from usuario import Usuario
+from libro import Libro
+from bd import BaseDatos
 
 def mostrar_menu():
     """
-    Muestra el menú principal con las opciones disponibles para el usuario.
+    Muestra el menú principal con opciones mejoradas.
     """
-    print("\n=== Menú Principal ===")
-    print("1. Listar libros")
-    print("2. Buscar libro")
-    print("3. Realizar préstamo")
-    print("4. Devolver libro")
-    print("5. Consultar préstamos de un usuario")
-    print("6. Listar usuarios")
-    print("7. Salir")
+    print("\n📚 === Menú Principal === 📚")
+    print("1️⃣  📖 Listar libros")
+    print("2️⃣  🔍 Buscar libro")
+    print("3️⃣  📥 Realizar préstamo")
+    print("4️⃣  📤 Devolver libro")
+    print("5️⃣  📑 Consultar préstamos de un usuario")
+    print("6️⃣  👥 Listar usuarios")
+    print("7️⃣  🚪 Salir")
+
+def input_validado(mensaje, tipo="texto"):
+    """
+    Valida la entrada del usuario según el tipo de dato esperado.
+    """
+    while True:
+        entrada = input(f"{mensaje}: ").strip()
+        
+        if not entrada:
+            print("⛔ Entrada no puede estar vacía. Intente de nuevo.")
+            continue
+        
+        if tipo == "numero":
+            if entrada.isdigit():
+                return int(entrada)
+            else:
+                print("⛔ Solo se permiten números. Intente de nuevo.")
+        elif tipo == "texto":
+            if entrada.isalpha() or " " in entrada:
+                return entrada
+            else:
+                print("⛔ Solo se permiten letras y espacios. Intente de nuevo.")
+        else:
+            return entrada  # Para otros tipos, retornar tal cual
 
 def listar_libros(biblioteca):
     """
-    Lista los libros disponibles en la biblioteca.
+    Lista los libros disponibles con formato mejorado.
     """
-    print("\nLista de libros en la biblioteca:")
+    print("\n📚 📖 Lista de libros en la biblioteca 📖 📚")
     print("=" * 90)
-    print(f"{'Código':<8} {'Título':<35} {'Autor':<25} {'Año':<6} {'Disponibles'}")
+    print(f"{'📑 Código':<10} {'📕 Título':<35} {'✍️ Autor':<25} {'📅 Año':<6} {'📦 Disponibles'}")
     print("=" * 90)
-    # Itera sobre los libros disponibles y los muestra en formato tabular.
     for libro in biblioteca.listar_libros_disponibles():
-        print(f"{libro.codigo:<8} {libro.titulo:<35} {libro.autor:<25} {libro.anio:<6} {libro.disponibles}")
+        print(f"{libro.codigo:<10} {libro.titulo:<35} {libro.autor:<25} {libro.anio:<6} {libro.disponibles}")
     print("=" * 90)
 
 def buscar_libro(biblioteca):
     """
-    Permite buscar libros en la biblioteca según diferentes criterios.
+    Permite buscar libros con opciones claras.
     """
-    print("\nBuscar libro por:")
-    print("1. Código")
-    print("2. Título")
-    print("3. Autor")
-    print("4. Área")
-    opcion_busqueda = input("Seleccione una opción: ")
+    print("\n🔍 Buscar libro por:")
+    print("1️⃣  Código")
+    print("2️⃣  Título")
+    print("3️⃣  Autor")
+    print("4️⃣  Área")
 
-    # Determina el criterio de búsqueda según la opción seleccionada.
-    if opcion_busqueda == "1":
-        criterio, valor = "codigo", input("Ingrese el código del libro: ").strip()
-    elif opcion_busqueda == "2":
-        criterio, valor = "titulo", input("Ingrese el título del libro: ").strip()
-    elif opcion_busqueda == "3":
-        criterio, valor = "autor", input("Ingrese el nombre del autor: ").strip()
-    elif opcion_busqueda == "4":
-        criterio, valor = "area", input("Ingrese el área de conocimiento: ").strip()
-    else:
-        print("Opción no válida.")
-        return
+    opcion_busqueda = input_validado("Seleccione una opción (1-4)", "numero")
 
-    # Busca libros que coincidan con el criterio y valor proporcionados.
-    resultados = biblioteca.buscar_libro(criterio, valor)
-    if resultados:
-        print("\nLibros encontrados:")
-        print("=" * 90)
-        for libro in resultados:
-            print(f"{libro.codigo:<8} {libro.titulo:<35} {libro.autor:<25} {libro.anio:<6} {libro.disponibles}")
-        print("=" * 90)
+    criterios = {1: "codigo", 2: "titulo", 3: "autor", 4: "area"}
+    
+    if opcion_busqueda in criterios:
+        valor = input_validado(f"Ingrese el {criterios[opcion_busqueda]}")
+        resultados = biblioteca.buscar_libro(criterios[opcion_busqueda], valor)
+
+        if resultados:
+            print("\n✅ Libros encontrados:")
+            print("=" * 90)
+            for libro in resultados:
+                print(f"{libro.codigo:<10} {libro.titulo:<35} {libro.autor:<25} {libro.anio:<6} {libro.disponibles}")
+            print("=" * 90)
+        else:
+            print("🚫 No se encontraron libros con ese criterio.")
     else:
-        print("No se encontraron libros con ese criterio.")
+        print("⛔ Opción inválida.")
 
 def listar_usuarios(biblioteca):
     """
-    Lista los usuarios registrados en la biblioteca.
+    Muestra los usuarios registrados en formato tabla.
     """
+    print("\n👥 Usuarios registrados:")
     print("=" * 60)
-    print(f"{'Código':<10} {'Nombre':<25} {'Tipo de Usuario'}")
+    print(f"{'🆔 Código':<10} {'👤 Nombre':<25} {'🎓 Tipo de Usuario'}")
     print("=" * 60)
-    # Itera sobre los usuarios registrados y los muestra en formato tabular.
     for usuario in biblioteca.usuarios:
         print(f"{usuario.codigo:<10} {usuario.nombre:<25} {usuario.tipo_usuario:<15}")
     print("=" * 60)
 
 def realizar_prestamo(biblioteca):
     """
-    Permite realizar un préstamo de un libro a un usuario.
+    Permite realizar un préstamo con validaciones.
     """
-    usuario_id = input("ID del usuario: ").strip()
-    libro_codigo = input("Código del libro: ").strip()
-    dias = int(input("Días de préstamo: "))
+    print("\n📥 Realizar un préstamo:")
+    usuario_id = input_validado("🆔 ID del usuario")
+    libro_codigo = input_validado("📖 Código del libro")
+    dias = input_validado("📆 Días de préstamo (máx. 30)", "numero")
 
-    # Busca al usuario y al libro en la biblioteca.
+    if dias > 30:
+        print("⚠️ No se pueden prestar libros por más de 30 días.")
+        return
+    
     usuario = next((u for u in biblioteca.usuarios if u.identificador == usuario_id), None)
     libro = next((l for l in biblioteca.libros if l.codigo == libro_codigo), None)
 
-    # Intenta realizar el préstamo y muestra el resultado.
     if usuario and libro and biblioteca.realizar_prestamo(usuario, libro, dias):
-        print("Préstamo realizado con éxito.")
+        print("✅ ¡Préstamo realizado con éxito!")
     else:
-        print("No se pudo realizar el préstamo.")
+        print("🚫 No se pudo realizar el préstamo.")
 
 def devolver_libro(biblioteca):
     """
-    Permite devolver un libro prestado por un usuario.
+    Permite devolver un libro con validaciones.
     """
-    usuario_id = input("ID del usuario: ").strip()
-    libro_codigo = input("Código del libro: ").strip()
+    print("\n📤 Devolver un libro:")
+    usuario_id = input_validado("🆔 ID del usuario")
+    libro_codigo = input_validado("📖 Código del libro")
 
-    # Busca al usuario y al libro en la biblioteca.
     usuario = next((u for u in biblioteca.usuarios if u.identificador == usuario_id), None)
     libro = next((l for l in biblioteca.libros if l.codigo == libro_codigo), None)
 
-    # Intenta devolver el libro y muestra el resultado.
     if usuario and libro and biblioteca.devolver_libro(usuario, libro):
-        print("Libro devuelto con éxito.")
+        print("✅ ¡Libro devuelto con éxito!")
     else:
-        print("No se pudo devolver el libro.")
+        print("🚫 No se pudo devolver el libro.")
 
 def consultar_prestamos_usuario(biblioteca):
     """
-    Consulta los préstamos activos de un usuario específico.
+    Consulta los préstamos de un usuario.
     """
-    usuario_id = input("ID del usuario: ").strip()
+    usuario_id = input_validado("🆔 ID del usuario")
     usuario = next((u for u in biblioteca.usuarios if u.identificador == usuario_id), None)
 
     if usuario:
         prestamos = biblioteca.consultar_prestamos_usuario(usuario)
         if prestamos:
-            print("\nPréstamos activos:")
+            print("\n📑 Préstamos activos:")
             for prestamo in prestamos:
-                print(prestamo)
+                print(f"📖 {prestamo}")
         else:
-            print("El usuario no tiene préstamos activos.")
+            print("ℹ️  El usuario no tiene préstamos activos.")
     else:
-        print("Usuario no encontrado.")
+        print("🚫 Usuario no encontrado.")
 
 def main():
     """
-    Función principal que inicializa la biblioteca y gestiona el flujo del programa.
+    Función principal que maneja el menú del sistema.
     """
-    biblioteca = Biblioteca()  # Crea una instancia de la biblioteca.
-    bd = BaseDatos()  # Crea una instancia de la base de datos.
-    biblioteca.libros = bd.obtener_libros()  # Carga los libros desde la base de datos.
-    biblioteca.usuarios = bd.obtener_usuarios()  # Carga los usuarios desde la base de datos.
+    biblioteca = Biblioteca()
+    bd = BaseDatos()
+    biblioteca.libros = bd.obtener_libros()
+    biblioteca.usuarios = bd.obtener_usuarios()
 
     while True:
-        mostrar_menu()  # Muestra el menú principal.
-        opcion = input("Seleccione una opción: ").strip()
+        mostrar_menu()
+        opcion = input_validado("Seleccione una opción", "numero")
 
-        # Ejecuta la acción correspondiente según la opción seleccionada.
-        if opcion == "1":
+        if opcion == 1:
             listar_libros(biblioteca)
-        elif opcion == "2":
+        elif opcion == 2:
             buscar_libro(biblioteca)
-        elif opcion == "3":
+        elif opcion == 3:
             realizar_prestamo(biblioteca)
-        elif opcion == "4":
+        elif opcion == 4:
             devolver_libro(biblioteca)
-        elif opcion == "5":
+        elif opcion == 5:
             consultar_prestamos_usuario(biblioteca)
-        elif opcion == "6":
+        elif opcion == 6:
             listar_usuarios(biblioteca)
-        elif opcion == "7":
-            print("Saliendo del sistema...")
+        elif opcion == 7:
+            print("👋 ¡Gracias por usar la biblioteca! 📚")
             break
         else:
-            print("Opción no válida. Intente nuevamente.")
+            print("⛔ Opción inválida. Intente de nuevo.")
 
-# Verifica si el script se está ejecutando directamente.
 if __name__ == "__main__":
-    main()  # Llama a la función principal.
+    main()
