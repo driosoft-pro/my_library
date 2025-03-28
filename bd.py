@@ -1,8 +1,13 @@
-from libro import Libro
-from usuario import Usuario
+from libro import Libro  # Importa la clase Libro desde el módulo libro.
+from usuario import Usuario  # Importa la clase Usuario desde el módulo usuario.
 
 class BaseDatos:
     def __init__(self):
+        """
+        Constructor de la clase BaseDatos.
+        Inicializa la base de datos con una lista de libros y usuarios predefinidos.
+        """
+        # Lista de libros disponibles en la base de datos, cada uno es una instancia de la clase Libro.
         self.libros = [
             Libro("Cien años de soledad", "Gabriel García Márquez", 1967, "Literatura", "L001", 5, 5),
             Libro("1984", "George Orwell", 1949, "Ficción", "L002", 4, 4),
@@ -36,6 +41,7 @@ class BaseDatos:
             Libro("El señor de los anillos", "J.R.R. Tolkien", 1954, "Fantasía", "L030", 3, 3)
         ]
 
+        # Lista de usuarios registrados en la base de datos, cada uno es una instancia de la clase Usuario.
         self.usuarios = [
             Usuario("U001", "Juan Pérez", "Estudiante"),
             Usuario("U002", "María López", "Profesor"),
@@ -45,7 +51,13 @@ class BaseDatos:
         ]
 
     def obtener_libros(self):
+        """
+        Retorna la lista de libros disponibles en la base de datos.
+        """
         return self.libros
     
     def obtener_usuarios(self):
+        """
+        Retorna la lista de usuarios registrados en la base de datos.
+        """
         return self.usuarios
