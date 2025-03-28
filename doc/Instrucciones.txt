@@ -1,0 +1,32 @@
+PROGRAMACIÓN (G02)Taller_U2-1
+Docente
+Breyner Posso M.Sc.
+bposso@uao.edu.co
+
+Ejercicio 1
+Diseñe e implemente un sistema de gestión de libros de una biblioteca usando el paradigma de POO y el lenguaje Python.Requerimientos del sistema (mínimos):
+1. Clases:
+- Libro:
+- Atributos: título, autor, anio_publicacion, area (por ejemplo, programación, física, etc.), código (único por libro), unidades(cantidad de libros), disponibles (cantidad de libros disponible para préstamo).
+- Usuario:
+- Atributos: nombre, identificador (puede ser el código), tipo de usuario (estudiante, profesor).
+- Prestamo:
+- Atributos: usuario (objeto), libro (objeto), fecha_prestamo, dias_prestamo, fecha_devolucion.
+2. Funcionalidades del Sistema:
+a. Los libros y usuarios ya deben estar creados antes que se ejecute el menú del sistema de gestión. Se deben tener mínimo 10libros y 3 usuarios.
+b. Listar todos los libros disponibles.
+c. Consultar libros por título, autor o area.
+d. Realizar un préstamo de un libro.
+e. Devolver un libro prestado.
+f. Consultar libros prestados por un usuario
+Reglas:
+a. Un libro solo puede ser prestado si hay unidades disponibles.
+b. Un usuario puede tener un máximo de tres libros prestados.
+c. Al realizar la devolución de un libro se debe verificar que se haga en los tiempos establecidos.
+d. Tienen la libertad de realizar las adiciones que consideren necesarias para que la ejecución de la aplicación sea coherente yrobusta (tolerante a fallos).
+e. Se debe entender muy bien todo el código implementado, sobre todo estructuras que no hemos usado en clase.
+Entregables:
+- Diagrama UML de las clases implementadas (se pueden enviar las imágenes).
+- Cada clase debe estar en un archivo .py.
+- Archivo .py donde se encuentre la implementación de la aplicación.
+- Código comentado y clases documentadas (consultar las recomendaciones del PEP8).
