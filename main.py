@@ -246,4 +246,4 @@ if __name__ == "__main__":
         main() # Llama a la función principal para iniciar el programa        
     except KeyboardInterrupt:
         # Si se interrumpe la ejecución (Ctrl+C), muestra un mensaje de salida
-        print("\nHas abandonado el juego.")
+        print("\nHas abandonado el sistema de gestion de la biblioteca.")
