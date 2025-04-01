@@ -1,45 +1,76 @@
 class Usuario:
-    LIMITE_PRESTAMOS = 3  # Límite máximo de préstamos que un usuario puede tener al mismo tiempo.
-
-    def __init__(self, codigo, nombre, tipo_usuario):
+    """
+    Clase que representa un usuario de la biblioteca.
+    
+    Atributos:
+        nombre (str): Nombre completo del usuario.
+        identificador (str): Identificador único del usuario.
+        tipo (str): Tipo de usuario (estudiante/profesor).
+        libros_prestados (list): Lista de libros actualmente prestados.
+    """
+    
+    def __init__(self, nombre, identificador, tipo):
         """
-        Constructor de la clase Usuario.
-        Inicializa los atributos del usuario con los valores proporcionados.
+        Inicializa un nuevo usuario con los datos proporcionados.
+        
+        Args:
+            nombre (str): Nombre completo.
+            identificador (str): ID único.
+            tipo (str): Tipo de usuario (estudiante/profesor).
         """
-        self.codigo = codigo  # Código único que identifica al usuario.
-        self.nombre = nombre  # Nombre del usuario.
-        self.tipo_usuario = tipo_usuario  # Tipo de usuario (por ejemplo, "Estudiante" o "Profesor").
-        self.prestamos = []  # Lista para almacenar los préstamos activos del usuario.
-
+        self.nombre = nombre
+        self.identificador = identificador
+        self.tipo = tipo.lower()
+        self.libros_prestados = []
+        
+    def __str__(self):
+        """Representación en string del usuario."""
+        return f"Usuario: {self.nombre} ({self.identificador}) - Tipo: {self.tipo}"
+    
     def puede_prestar(self):
         """
-        Verifica si el usuario puede realizar un nuevo préstamo.
-        Retorna True si el número de préstamos actuales es menor al límite permitido, de lo contrario False.
-        """
-        return len(self.prestamos) < self.LIMITE_PRESTAMOS
-
-    def agregar_prestamo(self, libro):
-        """Agrega un libro a la lista de préstamos del usuario si no supera el límite."""
-        if len(self.prestamos) >= 3:
-            print("No puedes tomar más de 3 libros prestados a la vez.")
-            return False  # Evita el préstamo si ya tiene 3 libros
+        Verifica si el usuario puede pedir prestado otro libro.
         
-        if libro in self.prestamos:
-            print("No puedes pedir el mismo libro más de una vez.")
-            return False  # Evita el préstamo duplicado
-
-        self.prestamos.append(libro)
-        return True
-
+        Returns:
+            bool: True si puede prestar (menos de 3 libros), False en caso contrario.
+        """
+        return len(self.libros_prestados) < 3
+    
+    def agregar_prestamo(self, prestamo):
+        """Agrega un préstamo a la lista de libros prestados del usuario."""
+        if self.puede_prestar():
+            self.libros_prestados.append(prestamo)
+            return True
+        return False
+    
     def remover_prestamo(self, prestamo):
-        """
-        Elimina un préstamo de la lista de préstamos del usuario.
-        """
-        self.prestamos.remove(prestamo)  # Elimina el préstamo especificado de la lista.
-
-    def __str__(self):
-        """
-        Retorna una representación en cadena del usuario.
-        Muestra el nombre, tipo de usuario y código del usuario.
-        """
-        return f"{self.nombre} ({self.tipo_usuario}) - ID: {self.codigo}"
+        """Remueve un préstamo de la lista de libros prestados del usuario."""
+        if prestamo in self.libros_prestados:
+            self.libros_prestados.remove(prestamo)
+            return True
+        return False
+    
+    def tiene_libro(self, codigo_libro):
+        """Verifica si el usuario tiene prestado un libro específico."""
+        for prestamo in self.libros_prestados:
+            if prestamo.libro.codigo == codigo_libro:
+                return True
+        return False
+    
+    def obtener_limite_prestamos(self):
+        """Devuelve el límite de préstamos según tipo de usuario"""
+        return 5 if self.tipo == "profesor" else 3  # Profesores pueden más libros
+    
+    def puede_prestar(self):
+        """Verifica si el usuario puede pedir prestado otro libro"""
+        return len(self.libros_prestados) < self.obtener_limite_prestamos()
+    
+    def obtener_libros_prestados(self):
+        """Devuelve información de libros prestados"""
+        return [{
+            'codigo': p.libro.codigo,
+            'titulo': p.libro.titulo,
+            'fecha_prestamo': p.fecha_prestamo.strftime('%d/%m/%Y'),
+            'fecha_devolucion': p.fecha_devolucion.strftime('%d/%m/%Y'),
+            'vencido': p.esta_vencido()
+        } for p in self.libros_prestados if not p.devuelto]

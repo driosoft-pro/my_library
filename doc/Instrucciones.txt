@@ -30,3 +30,31 @@ Entregables:
 - Cada clase debe estar en un archivo .py.
 - Archivo .py donde se encuentre la implementación de la aplicación.
 - Código comentado y clases documentadas (consultar las recomendaciones del PEP8).
+
++----------------+       +----------------+       +----------------+
+|     Libro      |       |    Usuario     |       |    Prestamo    |
++----------------+       +----------------+       +----------------+
+| - titulo       |       | - nombre       |       | - usuario      |
+| - autor        |       | - identificador|       | - libro        |
+| - anio_public  |       | - tipo         |       | - fecha_prest  |
+| - area         |       | - libros_prest |       | - dias_prest   |
+| - codigo       |       +----------------+       | - fecha_dev    |
+| - unidades     |       | + puede_prestar|       | - devuelto     |
+| - disponibles  |       | + agregar_prest|       +----------------+
++----------------+       | + remover_prest|       | + esta_vencido |
+| + prestar()    |       +----------------+       | + devolver()   |
+| + devolver()   |                                +----------------+
+| + esta_disp()  |
++----------------+
+
++----------------+       +----------------+
+|      BD        |       |  Biblioteca    |
++----------------+       +----------------+
+| - libros       |       | - bd           |
+| - usuarios     |       +----------------+
+| - prestamos    |       | + listar_libros|
++----------------+       | + consultar()  |
+| + obtener_*()  |       | + prestar()    |
+| + agregar_prest|       | + devolver()   |
+| + remover_prest|       +----------------+
++----------------+

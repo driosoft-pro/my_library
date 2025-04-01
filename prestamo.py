@@ -1,27 +1,49 @@
-from datetime import date, timedelta  # Importa las clases date y timedelta para manejar fechas.
+from datetime import datetime, timedelta
 
 class Prestamo:
-    def __init__(self, usuario, libro, dias_prestamo):
+    """
+    Clase que representa un préstamo de libro en el sistema.
+    
+    Atributos:
+        usuario (Usuario): Usuario que realiza el préstamo.
+        libro (Libro): Libro que se presta.
+        fecha_prestamo (datetime): Fecha en que se realiza el préstamo.
+        dias_prestamo (int): Días de duración del préstamo.
+        fecha_devolucion (datetime): Fecha estimada de devolución.
+        devuelto (bool): Indica si el libro ha sido devuelto.
+    """
+    
+    def __init__(self, usuario, libro, dias_prestamo=7):
         """
-        Constructor de la clase Prestamo.
-        Inicializa un préstamo con el usuario, el libro, la fecha de préstamo y la duración del préstamo.
+        Inicializa un nuevo préstamo.
+        
+        Args:
+            usuario (Usuario): Usuario que pide prestado.
+            libro (Libro): Libro a prestar.
+            dias_prestamo (int): Días del préstamo (default 7).
         """
-        self.usuario = usuario  # Usuario que realiza el préstamo.
-        self.libro = libro  # Libro que se presta.
-        self.fecha_prestamo = date.today()  # Fecha en la que se realiza el préstamo (fecha actual).
-        self.dias_prestamo = dias_prestamo  # Número de días que dura el préstamo.
-        self.fecha_devolucion = self.calcular_fecha_devolucion()  # Calcula la fecha de devolución.
-
-    def calcular_fecha_devolucion(self):
-        """
-        Calcula la fecha de devolución sumando los días del préstamo a la fecha de préstamo.
-        Retorna la fecha de devolución.
-        """
-        return self.fecha_prestamo + timedelta(days=self.dias_prestamo)  # Suma los días del préstamo a la fecha actual.
-
+        self.usuario = usuario
+        self.libro = libro
+        self.fecha_prestamo = datetime.now()
+        self.dias_prestamo = dias_prestamo
+        self.fecha_devolucion = self.fecha_prestamo + timedelta(days=dias_prestamo)
+        self.devuelto = False
+        
     def __str__(self):
-        """
-        Retorna una representación en cadena del préstamo.
-        Muestra el nombre del usuario, el título del libro y la fecha de devolución.
-        """
-        return f"{self.usuario.nombre} prestó {self.libro.titulo} hasta {self.fecha_devolucion}"
+        """Representación en string del préstamo."""
+        estado = "Devuelto" if self.devuelto else "Pendiente"
+        return (f"Préstamo: {self.libro.titulo} a {self.usuario.nombre}\n"
+                f"Fecha préstamo: {self.fecha_prestamo.strftime('%d/%m/%Y')}\n"
+                f"Fecha devolución: {self.fecha_devolucion.strftime('%d/%m/%Y')}\n"
+                f"Estado: {estado}")
+    
+    def esta_vencido(self):
+        """Verifica si el préstamo está vencido."""
+        return datetime.now() > self.fecha_devolucion and not self.devuelto
+    
+    def devolver(self):
+        """Marca el préstamo como devuelto."""
+        if not self.devuelto:
+            self.devuelto = True
+            return True
+        return False
