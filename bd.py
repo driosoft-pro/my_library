@@ -1,5 +1,6 @@
 from libro import Libro
 from usuario import Usuario
+import unicodedata
 
 class BD:
     """
@@ -58,17 +59,26 @@ class BD:
         if prestamo in self.prestamos:
             self.prestamos.remove(prestamo)
     
+    def normalizar_texto(texto):
+        """Elimina tildes y convierte a minúsculas para búsquedas insensibles"""
+        texto = unicodedata.normalize('NFD', texto.lower())
+        texto = ''.join(c for c in texto if not unicodedata.combining(c))
+        return texto
+    
     def obtener_libros_por_titulo(self, titulo):
-        """Busca libros por título (coincidencia parcial)."""
-        return [libro for libro in self.libros.values() if titulo.lower() in libro.titulo.lower()]
-    
+        titulo_norm = normalizar_texto(titulo)
+        return [libro for libro in self.libros.values() 
+                if titulo_norm in normalizar_texto(libro.titulo)]
+
     def obtener_libros_por_autor(self, autor):
-        """Busca libros por autor (coincidencia parcial)."""
-        return [libro for libro in self.libros.values() if autor.lower() in libro.autor.lower()]
-    
+        autor_norm = normalizar_texto(autor)
+        return [libro for libro in self.libros.values() 
+                if autor_norm in normalizar_texto(libro.autor)]
+
     def obtener_libros_por_area(self, area):
-        """Busca libros por área temática (coincidencia parcial)."""
-        return [libro for libro in self.libros.values() if area.lower() in libro.area.lower()]
+        area_norm = normalizar_texto(area)
+        return [libro for libro in self.libros.values() 
+                if area_norm in normalizar_texto(libro.area)]
     
     def obtener_prestamos_usuario(self, identificador_usuario):
         """Obtiene los préstamos de un usuario específico."""
@@ -83,8 +93,12 @@ class BD:
         return [u for u in self.usuarios.values() if nombre.lower() in u.nombre.lower()]
 
     def buscar_usuario_por_identificador(self, identificador):
-        """Busca usuario por coincidencia exacta de identificador"""
-        return self.usuarios.get(identificador)
+        """Ahora case-insensitive"""
+        identificador_norm = normalizar_texto(identificador)
+        for usuario in self.usuarios.values():
+            if normalizar_texto(usuario.identificador) == identificador_norm:
+                return usuario
+        return None
     
     def obtener_areas_tematicas(self):
         """Devuelve una lista de áreas temáticas únicas"""
