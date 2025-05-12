@@ -110,4 +110,3 @@ python main.py
 
 📝 **Desarrollado por:** **Deyton Riasco Ortiz, Dana Isabella Mosquera Mosquera, Samuel Izquierdo Bonilla**  
 📅 **Fecha:** 2025  
-📧 **Contacto:** [deyton007@gmail.com](mailto:deyton007@gmail.com)
